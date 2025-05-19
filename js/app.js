@@ -70,16 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const square = evt.target;
     const squareIndex = parseInt(square.id);
 
+    // Ignore clicks on non-square elements or invalid indices
     if (!square.classList.contains('sqr') || isNaN(squareIndex)) return;
-    if (board[squareIndex] !== '' || winner) return;
 
-    console.log(`Player ${turn} clicked square ${squareIndex}`);
+    // Ignore clicks if square is already taken or game is over
+    if (board[squareIndex] !== '' || winner) return;
 
     placePiece(squareIndex);
     checkForWinner();
     checkForTie();
-    render();
     switchPlayerTurn();
+    render();
   }
 
   function placePiece(index) {
@@ -87,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function checkForWinner() {
-    winner = false;
+    winner = false; // reset winner before checking
     for (let i = 0; i < winningCombos.length; i++) {
       const [a, b, c] = winningCombos[i];
       if (
@@ -96,8 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         board[a] === board[c]
       ) {
         winner = true;
-        console.log(`Player ${turn} wins with combo: [${a}, ${b}, ${c}]`);
-        break;
+        break; // stop checking once winner found
       }
     }
   }
@@ -108,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     tie = board.every(cell => cell !== '');
-    if (tie) console.log("It's a tie!");
   }
 
   function switchPlayerTurn() {
@@ -116,5 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
     turn = turn === 'X' ? 'O' : 'X';
   }
 
+  // Start the game on page load
   init();
 });
